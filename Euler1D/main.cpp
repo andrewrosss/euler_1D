@@ -186,6 +186,9 @@ int main(int argc, const char * argv[]) {
     
     
     // OUTPUT DATA TO FILES
+    double error_buffer = 0;
+    double p_ref = 404400.0, r_ref = 4.696;
+    double P, R;
     for (int i = 0; i < grid.NumberOfCells(); i++)
     {
         for (int j = 0; j < grid.NumberOfNodesPerCell(); j++)
@@ -204,9 +207,14 @@ int main(int argc, const char * argv[]) {
             << "\t"
             << grid.Cell(i).Node(j).GetPressure() << "\n";
             
-            
+            P = grid.Cell(i).Node(j).GetPressure();
+            R = grid.Cell(i).Node(j).GetDensity();
+            error_buffer += pow((P/p_ref)*pow(r_ref/R, 1.4) - 1.0, 2.0);
         }
     }
+    
+    error_buffer /= grid.NumberOfCells()*grid.NumberOfNodesPerCell();
+    error << sqrt(error_buffer);
 
     
     // CLOSE FILES
