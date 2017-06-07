@@ -175,7 +175,18 @@ int main(int argc, const char * argv[]) {
     assert(pressure_init.is_open());
     assert(pressure.is_open());
     
+    // CREATE/OPEN ERROR FILE
+    std::string error_file = ("error_" + std::to_string(interp_method)
+                                + "_(cells=" + std::to_string(interior_cells)
+                                + ")_(CFL=" + std::to_string(CFL) + ").txt");
+    std::ofstream error_init(density_file);
+    std::ofstream error(error_file, std::ios::app);
+    assert(error_init.is_open());
+    assert(error.is_open());
+    
+    
     // OUTPUT DATA TO FILES
+    double error_buffer = 0;
     for (int i = 0; i < grid.NumberOfCells(); i++)
     {
         for (int j = 0; j < grid.NumberOfNodesPerCell(); j++)
@@ -193,6 +204,8 @@ int main(int argc, const char * argv[]) {
             << grid.Cell(i).Node(j).GetXCoordinate()
             << "\t"
             << grid.Cell(i).Node(j).GetPressure() << "\n";
+            
+            
         }
     }
 
@@ -204,6 +217,8 @@ int main(int argc, const char * argv[]) {
     velocity_init.close();
     pressure.close();
     pressure_init.close();
+    error.close();
+    error_init.close();
     
     
     std::cout << "\nthe simulation ran for : " << elapsed_time << " seconds\n\n";
@@ -309,7 +324,7 @@ double initial_density6(double x)
     }
     else if (x >= 8.5)
     {
-        return 1.744;
+        return 1.7445572954467772;
     }
     else
     {

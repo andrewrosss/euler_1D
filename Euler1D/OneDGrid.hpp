@@ -6,6 +6,7 @@
 //  Copyright © 2017 Andrew Ross. All rights reserved.
 //
 
+
 #ifndef OneDGrid_hpp
 #define OneDGrid_hpp
 
