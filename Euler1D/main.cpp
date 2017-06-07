@@ -83,7 +83,7 @@ int main(int argc, const char * argv[]) {
     /******** SPECIFY SIMULATION PARAMETERS: ****************************/
  
     // NUMBER OF CELLS
-    const unsigned int interior_cells = 640;
+    const unsigned int interior_cells = 20;
     
     // NUMBER OF SOLUTION POINTS per CELL
     const unsigned int nodes_per_cell = 2;
@@ -186,7 +186,6 @@ int main(int argc, const char * argv[]) {
     
     
     // OUTPUT DATA TO FILES
-    double error_buffer = 0;
     for (int i = 0; i < grid.NumberOfCells(); i++)
     {
         for (int j = 0; j < grid.NumberOfNodesPerCell(); j++)
