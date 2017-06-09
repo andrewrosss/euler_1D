@@ -86,13 +86,13 @@ int main(int argc, const char * argv[]) {
     const unsigned int interior_cells = 20;
     
     // NUMBER OF SOLUTION POINTS per CELL
-    const unsigned int nodes_per_cell = 2;
+    const unsigned int nodes_per_cell = 4;
     
     // CFL NUMBER
     double CFL = 0.01;
     
     // HOW TO INTERPOLATE TO THE BOUNDARY [see note above]
-    int interp_method = 12;
+    int interp_method = 24;
     
     // TIME MARCHING METHOD [1: RK1 | 2: RK2 | 4: RK4]
     int time_march_method = 4;
@@ -179,7 +179,7 @@ int main(int argc, const char * argv[]) {
     std::string error_file = ("error_" + std::to_string(interp_method)
                                 + "_(cells=" + std::to_string(interior_cells)
                                 + ")_(CFL=" + std::to_string(CFL) + ").txt");
-    std::ofstream error_init(density_file);
+    std::ofstream error_init(error_file);
     std::ofstream error(error_file, std::ios::app);
     assert(error_init.is_open());
     assert(error.is_open());
