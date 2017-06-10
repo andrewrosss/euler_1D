@@ -83,16 +83,16 @@ int main(int argc, const char * argv[]) {
     /******** SPECIFY SIMULATION PARAMETERS: ****************************/
  
     // NUMBER OF CELLS
-    const unsigned int interior_cells = 640;
+    const unsigned int interior_cells = 20;
     
     // NUMBER OF SOLUTION POINTS per CELL
-    const unsigned int nodes_per_cell = 2;
+    const unsigned int nodes_per_cell = 4;
     
     // CFL NUMBER
     double CFL = 0.01;
     
     // HOW TO INTERPOLATE TO THE BOUNDARY [see note above]
-    int interp_method = 12;
+    int interp_method = 24;
     
     // TIME MARCHING METHOD [1: RK1 | 2: RK2 | 4: RK4]
     int time_march_method = 4;
@@ -179,7 +179,7 @@ int main(int argc, const char * argv[]) {
     std::string error_file = ("error_" + std::to_string(interp_method)
                                 + "_(cells=" + std::to_string(interior_cells)
                                 + ")_(CFL=" + std::to_string(CFL) + ").txt");
-    std::ofstream error_init(density_file);
+    std::ofstream error_init(error_file);
     std::ofstream error(error_file, std::ios::app);
     assert(error_init.is_open());
     assert(error.is_open());
@@ -187,6 +187,8 @@ int main(int argc, const char * argv[]) {
     
     // OUTPUT DATA TO FILES
     double error_buffer = 0;
+    double p_ref = 404400.0, r_ref = 4.696;
+    double P, R;
     for (int i = 0; i < grid.NumberOfCells(); i++)
     {
         for (int j = 0; j < grid.NumberOfNodesPerCell(); j++)
@@ -205,9 +207,14 @@ int main(int argc, const char * argv[]) {
             << "\t"
             << grid.Cell(i).Node(j).GetPressure() << "\n";
             
-            
+            P = grid.Cell(i).Node(j).GetPressure();
+            R = grid.Cell(i).Node(j).GetDensity();
+            error_buffer += pow((P/p_ref)*pow(r_ref/R, 1.4) - 1.0, 2.0);
         }
     }
+    
+    error_buffer /= grid.NumberOfCells()*grid.NumberOfNodesPerCell();
+    error << sqrt(error_buffer);
 
     
     // CLOSE FILES
